@@ -13,19 +13,21 @@
  #include <stdlib.h>
 
  char* GetUserChange( int StartingCents );
+
  char* Pennies( int ChangeCount );
  char* Nickels( int ChangeCount );
+ char* Dimes( int ChangeCount );
+ char* Quarters( int ChangeCount );
 
  char* SingleOrPlural( int Count, const char* Single, const char* Plural );
  char* AddWhiteSpaceAtStart( const char* Of );
  void  Append( char* Of, char toAppend );
- char* Dimes( int ChangeCount );
-
 
  /** globals */
  char* penniesAsWord;
  char* nickelsAsWord;
  char* dimesAsWord;
+ char* quarterAsWord;
  char* intoSingleOrPlural;
  char* result;
 
@@ -36,6 +38,7 @@
    penniesAsWord = malloc( 80 );
    nickelsAsWord = malloc( 80 );
    dimesAsWord = malloc( 80 );
+   quarterAsWord = malloc( 80 );
    intoSingleOrPlural = malloc( 80 );
 
    if( StartingCents > 0 && StartingCents <= 4 )
@@ -52,7 +55,7 @@
    }
    else if( StartingCents > 24 && StartingCents < 65535 )
    {
-
+     result = Quarters( StartingCents );
    }
 
    return result;
@@ -60,6 +63,7 @@
    free( penniesAsWord );
    free( nickelsAsWord );
    free( dimesAsWord );
+   free( quarterAsWord );
    free( intoSingleOrPlural );
    free( result );
  }
@@ -110,6 +114,35 @@
    }
 
    return dimesAsWord;
+ }
+
+ char*
+ Quarters( int ChangeCount )
+ {
+   int remainderChange = ChangeCount % 25;
+   int numberOfQuaters = (ChangeCount - remainderChange) / 25;
+   quarterAsWord = SingleOrPlural( numberOfQuaters, " quarter", " quarters" );
+
+   if( remainderChange > 0 )
+   {
+     Append( quarterAsWord, ' ' );
+     if( remainderChange > 9 )
+     {
+       dimesAsWord = Dimes( remainderChange );
+       strncat( quarterAsWord, dimesAsWord, 80 );
+     }
+     else if( remainderChange > 4 )
+     {
+       nickelsAsWord = Nickels( remainderChange );
+       strncat( quarterAsWord, nickelsAsWord, 80 );
+     }
+     else
+     {
+       penniesAsWord = Pennies( remainderChange );
+       strncat( quarterAsWord, penniesAsWord, 80 );
+     }
+   }
+   return quarterAsWord;
  }
 
  char*
