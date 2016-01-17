@@ -34,12 +34,12 @@
  char*
  GetUserChange( int StartingCents )
  {
-   result = malloc( 80 );
-   penniesAsWord = malloc( 80 );
-   nickelsAsWord = malloc( 80 );
-   dimesAsWord = malloc( 80 );
-   quarterAsWord = malloc( 80 );
-   intoSingleOrPlural = malloc( 80 );
+   result = malloc( 256 );
+   penniesAsWord = malloc( 256 );
+   nickelsAsWord = malloc( 256 );
+   dimesAsWord = malloc( 256 );
+   quarterAsWord = malloc( 256 );
+   intoSingleOrPlural = malloc( 256 );
 
    if( StartingCents > 0 && StartingCents <= 4 )
    {
@@ -85,7 +85,7 @@
    {
      Append( nickelsAsWord, ' ' );
      penniesAsWord = Pennies( remainderChange );
-     strncat( nickelsAsWord, penniesAsWord, 80 );
+     strncat( nickelsAsWord, penniesAsWord, 256 );
    }
 
    return nickelsAsWord;
@@ -104,12 +104,12 @@
      if( remainderChange > 4 )
      {
        nickelsAsWord = Nickels( remainderChange );
-       strncat( dimesAsWord, nickelsAsWord, 80 );
+       strncat( dimesAsWord, nickelsAsWord, 256 );
      }
      else
      {
        penniesAsWord = Pennies( remainderChange );
-       strncat( dimesAsWord, penniesAsWord, 80 );
+       strncat( dimesAsWord, penniesAsWord, 256 );
      }
    }
 
@@ -129,17 +129,17 @@
      if( remainderChange > 9 )
      {
        dimesAsWord = Dimes( remainderChange );
-       strncat( quarterAsWord, dimesAsWord, 80 );
+       strncat( quarterAsWord, dimesAsWord, 256 );
      }
      else if( remainderChange > 4 )
      {
        nickelsAsWord = Nickels( remainderChange );
-       strncat( quarterAsWord, nickelsAsWord, 80 );
+       strncat( quarterAsWord, nickelsAsWord, 256 );
      }
      else
      {
        penniesAsWord = Pennies( remainderChange );
-       strncat( quarterAsWord, penniesAsWord, 80 );
+       strncat( quarterAsWord, penniesAsWord, 256 );
      }
    }
    return quarterAsWord;
