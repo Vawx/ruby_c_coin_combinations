@@ -17,6 +17,6 @@ describe CoinCombination do
     expect(CoinCombination.get_change(43)).to(eq("1 quarter 1 dime 1 nickel 3 pennies"))
   end
   it "takes the input of 143 and changews it to 4 quarters 1 dime 1 nickel 3 pennies" do
-    expect(CoinCombination.get_change(143)).to(eq("4 quarters 1 dime 1 nickel 3 pennies"))
+    expect(CoinCombination.get_change(143)).to(eq("5 quarters 1 dime 1 nickel 3 pennies"))
   end
 end

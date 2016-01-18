@@ -16,7 +16,7 @@
 
  void CurrencyConversion( int CurrentChange, char* ChangeAsWord, int Divisible, const char* Single, const char* Plural );
 
- char* GetUserChange( int CurrentChange, char* AsChange );
+ char* GetUserChange( int CurrentChange );
  void  SingleOrPlural( int ChangeCountForConversion, const char* Single, const char* Plural, char* ChangeAsWord );
  void  Append( char* Of, char ToAppend );
 
@@ -35,8 +35,9 @@
  }
 
  char*
- GetUserChange( int StartingCents, char* AsChange )
+ GetUserChange( int StartingCents )
  {
+   char* AsChange = malloc( sizeof( char[MAX_STRING_SIZE] ) );
    if( StartingCents > 0 && StartingCents <= 4 )
    {
      CurrencyConversion( StartingCents, AsChange, 1, " penny", " pennies" );
@@ -97,9 +98,6 @@
  int
  main( int argc, char* argv[] )
  {
-   char* result = malloc( sizeof( char[ MAX_STRING_SIZE ] ) );
-   GetUserChange( 37, result );
-   printf("%s\n", result );
-   free( result );
+   GetUserChange( 12 );
    return 0;
  }
