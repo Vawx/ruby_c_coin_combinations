@@ -94,10 +94,3 @@
      free( remainderAsWord );
    }
  }
-
- int
- main( int argc, char* argv[] )
- {
-   GetUserChange( 12 );
-   return 0;
- }
