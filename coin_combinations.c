@@ -9,162 +9,97 @@
  */
 
  #include <stdio.h>
- #include <string.h>
  #include <stdlib.h>
+ #include <string.h>
 
- char* GetUserChange( int StartingCents );
+ #define MAX_STRING_SIZE 256
 
- char* Pennies( int ChangeCount );
- char* Nickels( int ChangeCount );
- char* Dimes( int ChangeCount );
- char* Quarters( int ChangeCount );
+ void CurrencyConversion( int CurrentChange, char* ChangeAsWord, int Divisible, const char* Single, const char* Plural );
 
- char* SingleOrPlural( int Count, const char* Single, const char* Plural );
- char* AddWhiteSpaceAtStart( const char* Of );
- void  Append( char* Of, char toAppend );
+ char* GetUserChange( int CurrentChange, char* AsChange );
+ void  SingleOrPlural( int ChangeCountForConversion, const char* Single, const char* Plural, char* ChangeAsWord );
+ void  Append( char* Of, char ToAppend );
 
- /** globals */
- char* penniesAsWord;
- char* nickelsAsWord;
- char* dimesAsWord;
- char* quarterAsWord;
- char* intoSingleOrPlural;
- char* result;
+ void
+ SingleOrPlural( int ChangeCountForConversion, const char* Single, const char* Plural, char* ChangeAsWord )
+ {
+   char intoSingleOrPlural[ MAX_STRING_SIZE ];
+   sprintf( intoSingleOrPlural, "%d", ChangeCountForConversion );
+
+   char end[ MAX_STRING_SIZE ];
+
+   strcpy( ChangeAsWord, intoSingleOrPlural );
+   strcpy( end, ( ChangeCountForConversion > 1 ) ? Plural : Single );
+
+   strcat( ChangeAsWord, end );
+ }
 
  char*
- GetUserChange( int StartingCents )
+ GetUserChange( int StartingCents, char* AsChange )
  {
-   result = malloc( 256 );
-   penniesAsWord = malloc( 256 );
-   nickelsAsWord = malloc( 256 );
-   dimesAsWord = malloc( 256 );
-   quarterAsWord = malloc( 256 );
-   intoSingleOrPlural = malloc( 256 );
-
    if( StartingCents > 0 && StartingCents <= 4 )
    {
-     result = Pennies( StartingCents );
+     CurrencyConversion( StartingCents, AsChange, 1, " penny", " pennies" );
    }
    else if( StartingCents > 4 && StartingCents <= 9 )
    {
-     result = Nickels( StartingCents );
+     CurrencyConversion( StartingCents, AsChange, 5, " nickel", " nickels" );
    }
    else if ( StartingCents > 9 && StartingCents <= 24 )
    {
-     result = Dimes( StartingCents );
+     CurrencyConversion( StartingCents, AsChange, 10, " dime", " dimes" );
    }
    else if( StartingCents > 24 && StartingCents < 65535 )
    {
-     result = Quarters( StartingCents );
+     CurrencyConversion( StartingCents, AsChange, 25, " quarter", " quarters" );
    }
-
-   return result;
-
-   free( penniesAsWord );
-   free( nickelsAsWord );
-   free( dimesAsWord );
-   free( quarterAsWord );
-   free( intoSingleOrPlural );
-   free( result );
- }
-
- char*
- Pennies( int ChangeCount )
- {
-   return SingleOrPlural( ChangeCount, " penny", " pennies" );
- }
-
- char*
- Nickels( int ChangeCount )
- {
-   int remainderChange = ChangeCount % 5;
-   int numberOfNickels = (ChangeCount - remainderChange) / 5;
-   nickelsAsWord = SingleOrPlural( numberOfNickels, " nickel", " nickels" );
-
-   if ( remainderChange > 0 )
-   {
-     Append( nickelsAsWord, ' ' );
-     penniesAsWord = Pennies( remainderChange );
-     strncat( nickelsAsWord, penniesAsWord, 256 );
-   }
-
-   return nickelsAsWord;
- }
-
- char*
- Dimes( int ChangeCount )
- {
-   int remainderChange = ChangeCount % 10;
-   int numberOfDimes = (ChangeCount - remainderChange) / 10;
-   dimesAsWord = SingleOrPlural( numberOfDimes, " dime", " dimes" );
-
-   if( remainderChange > 0 )
-   {
-     Append( dimesAsWord, ' ' );
-     if( remainderChange > 4 )
-     {
-       nickelsAsWord = Nickels( remainderChange );
-       strncat( dimesAsWord, nickelsAsWord, 256 );
-     }
-     else
-     {
-       penniesAsWord = Pennies( remainderChange );
-       strncat( dimesAsWord, penniesAsWord, 256 );
-     }
-   }
-
-   return dimesAsWord;
- }
-
- char*
- Quarters( int ChangeCount )
- {
-   int remainderChange = ChangeCount % 25;
-   int numberOfQuaters = (ChangeCount - remainderChange) / 25;
-   quarterAsWord = SingleOrPlural( numberOfQuaters, " quarter", " quarters" );
-
-   if( remainderChange > 0 )
-   {
-     Append( quarterAsWord, ' ' );
-     if( remainderChange > 9 )
-     {
-       dimesAsWord = Dimes( remainderChange );
-       strncat( quarterAsWord, dimesAsWord, 256 );
-     }
-     else if( remainderChange > 4 )
-     {
-       nickelsAsWord = Nickels( remainderChange );
-       strncat( quarterAsWord, nickelsAsWord, 256 );
-     }
-     else
-     {
-       penniesAsWord = Pennies( remainderChange );
-       strncat( quarterAsWord, penniesAsWord, 256 );
-     }
-   }
-   return quarterAsWord;
- }
-
- char*
- SingleOrPlural( int Count, const char* Single, const char* Plural )
- {
-   intoSingleOrPlural = malloc( strlen( Plural ) + 8 );
-   sprintf( intoSingleOrPlural, "%d", Count );
-   if( Count > 1 )
-   {
-     strcat( intoSingleOrPlural, Plural );
-   }
-   else
-   {
-     strcat( intoSingleOrPlural, Single );
-   }
-   return intoSingleOrPlural;
+   return AsChange;
  }
 
  void
- Append( char* Of, char toAppend )
+ Append( char* Of, char ToAppend )
  {
    int length = strlen( Of );
-   Of[ length ] = toAppend;
+   Of[ length ] = ToAppend;
    Of[ length + 1 ] = '\0';
+ }
+
+ void
+ CurrencyConversion( int CurrentChange, char* ChangeAsWord, int Divisible, const char* Single, const char* Plural )
+ {
+   int remainderChange = CurrentChange % Divisible;
+   int numberOfCoins = ( CurrentChange - remainderChange ) / Divisible;
+   SingleOrPlural( numberOfCoins, Single, Plural, ChangeAsWord );
+
+   if ( remainderChange > 0 )
+   {
+     Append( ChangeAsWord, ' ' );
+     char* remainderAsWord = malloc( sizeof( char[MAX_STRING_SIZE] ) );
+
+     if( remainderChange > 9 )
+     {
+       CurrencyConversion( remainderChange, remainderAsWord, 10, " dime", " dimes" );
+     }
+     else if( remainderChange > 4 )
+     {
+       CurrencyConversion( remainderChange, remainderAsWord, 5, " nickel", " nickel" );
+     }
+     else
+     {
+       CurrencyConversion( remainderChange, remainderAsWord, 1, " penny", " pennies" );
+     }
+
+     strncat( ChangeAsWord, remainderAsWord, MAX_STRING_SIZE );
+     free( remainderAsWord );
+   }
+ }
+
+ int
+ main( int argc, char* argv[] )
+ {
+   char* result = malloc( sizeof( char[ MAX_STRING_SIZE ] ) );
+   GetUserChange( 37, result );
+   printf("%s\n", result );
+   free( result );
+   return 0;
  }
