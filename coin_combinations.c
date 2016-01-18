@@ -54,7 +54,10 @@
    {
      CurrencyConversion( StartingCents, AsChange, 25, " quarter", " quarters" );
    }
-   return AsChange;
+   char* ToReturn[MAX_STRING_SIZE];
+   strcpy( ToReturn, AsChange );
+   free( AsChange );
+   return ToReturn;
  }
 
  void
@@ -94,3 +97,9 @@
      free( remainderAsWord );
    }
  }
+
+ int
+ main( int argc, char* argv[] )
+{
+  return 0;
+}
