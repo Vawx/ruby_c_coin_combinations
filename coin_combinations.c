@@ -101,5 +101,6 @@
  int
  main( int argc, char* argv[] )
 {
+  // So program compiles with gcc
   return 0;
 }
