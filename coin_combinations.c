@@ -8,6 +8,10 @@
  * http://www.epicodus.com
  */
 
+ // gcc -c -fPIC coin_combinations.c -o coin_combinations.o
+ // gcc -shared -o coin_combinations.so coin_combinations.o
+
+
  #include <stdio.h>
  #include <stdlib.h>
  #include <string.h>
@@ -101,6 +105,7 @@
  int
  main( int argc, char* argv[] )
 {
+  GetUserChange( 12 );
   // So program compiles with gcc
   return 0;
 }
