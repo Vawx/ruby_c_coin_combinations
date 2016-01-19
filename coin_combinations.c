@@ -58,10 +58,10 @@
    {
      CurrencyConversion( StartingCents, AsChange, 25, " quarter", " quarters" );
    }
-   char* ToReturn[MAX_STRING_SIZE];
-   strcpy( ToReturn, AsChange );
-   free( AsChange );
-   return ToReturn;
+   //char* ToReturn[MAX_STRING_SIZE];
+   //strcpy( ToReturn, AsChange );
+   //free( AsChange );
+   return AsChange;
  }
 
  void
@@ -105,7 +105,7 @@
  int
  main( int argc, char* argv[] )
 {
-  GetUserChange( 12 );
+  printf("Change %s\n", GetUserChange( 32 ) );
   // So program compiles with gcc
   return 0;
 }
