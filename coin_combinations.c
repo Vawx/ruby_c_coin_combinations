@@ -8,6 +8,7 @@
  * http://www.epicodus.com
  */
 
+ // Compile commands
  // gcc -c -fPIC coin_combinations.c -o coin_combinations.o
  // gcc -shared -o coin_combinations.so coin_combinations.o
 
@@ -20,7 +21,7 @@
 
  void CurrencyConversion( int CurrentChange, char* ChangeAsWord, int Divisible, const char* Single, const char* Plural );
 
- char* GetUserChange( int CurrentChange );
+ char* GetUserChange( int CurrentChange, char* AsChange );
  void  SingleOrPlural( int ChangeCountForConversion, const char* Single, const char* Plural, char* ChangeAsWord );
  void  Append( char* Of, char ToAppend );
 
@@ -39,9 +40,8 @@
  }
 
  char*
- GetUserChange( int StartingCents )
+ GetUserChange( int StartingCents, char* AsChange )
  {
-   char* AsChange = malloc( sizeof( char[MAX_STRING_SIZE] ) );
    if( StartingCents > 0 && StartingCents <= 4 )
    {
      CurrencyConversion( StartingCents, AsChange, 1, " penny", " pennies" );
@@ -58,9 +58,6 @@
    {
      CurrencyConversion( StartingCents, AsChange, 25, " quarter", " quarters" );
    }
-   //char* ToReturn[MAX_STRING_SIZE];
-   //strcpy( ToReturn, AsChange );
-   //free( AsChange );
    return AsChange;
  }
 
@@ -105,7 +102,6 @@
  int
  main( int argc, char* argv[] )
 {
-  printf("Change %s\n", GetUserChange( 32 ) );
   // So program compiles with gcc
   return 0;
 }
